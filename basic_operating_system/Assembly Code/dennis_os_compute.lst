@@ -1,0 +1,140 @@
+     1                                  [org 0x7c00]
+     2                                  [bits 16]
+     3                                  
+     4 00000000 BD0090                  mov bp, 0x9000
+     5 00000003 89EC                    mov sp, bp
+     6 00000005 E80601                  call c
+     7 00000008 E80901                  call b
+     8 0000000B E80B00                  call f1
+     9 0000000E E84D00                  call f2
+    10 00000011 E88B00                  call f3
+    11 00000014 E8C200                  call f4
+    12 00000017 EBFE                    jmp $
+    13                                  
+    14                                  f1:
+    15 00000019 BE[4900]                    mov si, m1
+    16 0000001C E82801                      call pr
+    17 0000001F B83412                      mov ax, 0x1234
+    18 00000022 BB7856                      mov bx, 0x5678
+    19 00000025 89C2                        mov dx, ax
+    20 00000027 E82901                      call hx
+    21 0000002A BE[5600]                    mov si, pl
+    22 0000002D E81701                      call pr
+    23 00000030 89DA                        mov dx, bx
+    24 00000032 E81E01                      call hx
+    25 00000035 BE[5A00]                    mov si, eq
+    26 00000038 E80C01                      call pr
+    27 0000003B 01D8                        add ax, bx
+    28 0000003D 89C2                        mov dx, ax
+    29 0000003F E81101                      call hx
+    30 00000042 BE[6D01]                    mov si, o
+    31 00000045 E8FF00                      call pr
+    32 00000048 C3                          ret
+    33 00000049 0A0D5B312E4144445D-     m1: db 0xA,0xD,'[1.ADD] 0x',0
+    33 00000052 20307800           
+    34 00000056 2B307800                pl: db '+0x',0
+    35 0000005A 3D307800                eq: db '=0x',0
+    36                                  
+    37                                  f2:
+    38 0000005E BE[8E00]                    mov si, m2
+    39 00000061 E8E300                      call pr
+    40 00000064 B8FFFF                      mov ax, 0xFFFF
+    41 00000067 BB1111                      mov bx, 0x1111
+    42 0000006A 89C2                        mov dx, ax
+    43 0000006C E8E400                      call hx
+    44 0000006F BE[9B00]                    mov si, mn
+    45 00000072 E8D200                      call pr
+    46 00000075 89DA                        mov dx, bx
+    47 00000077 E8D900                      call hx
+    48 0000007A BE[5A00]                    mov si, eq
+    49 0000007D E8C700                      call pr
+    50 00000080 29D8                        sub ax, bx
+    51 00000082 89C2                        mov dx, ax
+    52 00000084 E8CC00                      call hx
+    53 00000087 BE[6D01]                    mov si, o
+    54 0000008A E8BA00                      call pr
+    55 0000008D C3                          ret
+    56 0000008E 0A0D5B322E5355425D-     m2: db 0xA,0xD,'[2.SUB] 0x',0
+    56 00000097 20307800           
+    57 0000009B 2D307800                mn: db '-0x',0
+    58                                  
+    59                                  f3:
+    60 0000009F BE[C100]                    mov si, m3
+    61 000000A2 E8A200                      call pr
+    62 000000A5 B8CDAB                      mov ax, 0xABCD
+    63 000000A8 BBCDAB                      mov bx, 0xABCD
+    64 000000AB 39D8                        cmp ax, bx
+    65 000000AD 7405                        je .e
+    66 000000AF BE[D200]                    mov si, ne
+    67 000000B2 EB03                        jmp .d
+    68 000000B4 BE[CC00]                .e: mov si, ye
+    69 000000B7 E88D00                  .d: call pr
+    70 000000BA BE[6D01]                    mov si, o
+    71 000000BD E88700                      call pr
+    72 000000C0 C3                          ret
+    73 000000C1 0A0D5B332E434D505D-     m3: db 0xA,0xD,'[3.CMP] ',0
+    73 000000CA 2000               
+    74 000000CC 455155414C00            ye: db 'EQUAL',0
+    75 000000D2 4E4F5420455100          ne: db 'NOT EQ',0
+    76                                  
+    77                                  f4:
+    78 000000D9 BE[FB00]                    mov si, m4
+    79 000000DC E86800                      call pr
+    80 000000DF B81000                      mov ax, 0x0010
+    81 000000E2 89C2                        mov dx, ax
+    82 000000E4 E86C00                      call hx
+    83 000000E7 BE[0801]                    mov si, mu
+    84 000000EA E85A00                      call pr
+    85 000000ED D1E0                        shl ax, 1
+    86 000000EF 89C2                        mov dx, ax
+    87 000000F1 E85F00                      call hx
+    88 000000F4 BE[6D01]                    mov si, o
+    89 000000F7 E84D00                      call pr
+    90 000000FA C3                          ret
+    91 000000FB 0A0D5B342E4D554C5D-     m4: db 0xA,0xD,'[4.MUL] 0x',0
+    91 00000104 20307800           
+    92 00000108 2A323D307800            mu: db '*2=0x',0
+    93                                  
+    94                                  c:
+    95 0000010E B80300                      mov ax, 0x0003
+    96 00000111 CD10                        int 0x10
+    97 00000113 C3                          ret
+    98                                  
+    99                                  b:
+   100 00000114 BE[1B01]                    mov si, bn
+   101 00000117 E82D00                      call pr
+   102 0000011A C3                          ret
+   103 0000011B 3D3D3D20434F4D5055-     bn: db '=== COMPUTE ENGINE ===',0xA,0xD,'By: Dennis Sharon',0xA,0xD,0
+   103 00000124 544520454E47494E45-
+   103 0000012D 203D3D3D0A0D42793A-
+   103 00000136 2044656E6E69732053-
+   103 0000013F 6861726F6E0A0D00   
+   104                                  
+   105                                  pr:
+   106 00000147 B40E                        mov ah, 0x0e
+   107 00000149 AC                      .l: lodsb
+   108 0000014A 84C0                        test al, al
+   109 0000014C 7404                        jz .d
+   110 0000014E CD10                        int 0x10
+   111 00000150 EBF7                        jmp .l
+   112 00000152 C3                      .d: ret
+   113                                  
+   114                                  hx:
+   115 00000153 B90400                      mov cx, 4
+   116 00000156 C1C204                  .l: rol dx, 4
+   117 00000159 89D0                        mov ax, dx
+   118 0000015B 240F                        and al, 0x0F
+   119 0000015D 0430                        add al, 0x30
+   120 0000015F 3C39                        cmp al, 0x39
+   121 00000161 7E02                        jle .p
+   122 00000163 0407                        add al, 7
+   123 00000165 B40E                    .p: mov ah, 0x0e
+   124 00000167 CD10                        int 0x10
+   125 00000169 49                          dec cx
+   126 0000016A 75EA                        jnz .l
+   127 0000016C C3                          ret
+   128                                  
+   129 0000016D 204F4B0A0D00            o: db ' OK',0xA,0xD,0
+   130                                  
+   131 00000173 00<rep 8Bh>             times 510-($-$$) db 0
+   132 000001FE 55AA                    dw 0xaa55

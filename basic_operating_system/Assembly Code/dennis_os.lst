@@ -1,0 +1,145 @@
+     1                                  [org 0x7c00]
+     2                                  [bits 16]
+     3                                  
+     4 00000000 BD0090                  mov bp, 0x9000
+     5 00000003 89EC                    mov sp, bp
+     6 00000005 E83401                  call cls
+     7 00000008 E83701                  call banner
+     8 0000000B E80B00                  call func_list
+     9 0000000E E84E00                  call func_move
+    10 00000011 E88D00                  call func_rename
+    11 00000014 E8DE00                  call func_delete
+    12 00000017 EBFE                    jmp $
+    13                                  
+    14                                  ; FUNCTION 1: LIST - Display file system
+    15                                  func_list:
+    16 00000019 BE[2C00]                    mov si, h1
+    17 0000001C E88C01                      call pr
+    18 0000001F BE[3A00]                    mov si, items
+    19 00000022 E88601                      call pr
+    20 00000025 BE[D101]                    mov si, ok
+    21 00000028 E88001                      call pr
+    22 0000002B C3                          ret
+    23 0000002C 0A0D5B312E204C4953-     h1: db 0xA,0xD,'[1. LIST]',0xA,0xD,0
+    23 00000035 545D0A0D00         
+    24 0000003A 2066696C65312E7478-     items: db ' file1.txt',0xA,0xD
+    24 00000043 740A0D             
+    25 00000046 2066696C65322E6461-            db ' file2.dat',0xA,0xD
+    25 0000004F 740A0D             
+    26 00000052 2066696C65332E6269-            db ' file3.bin',0xA,0xD,0
+    26 0000005B 6E0A0D00           
+    27                                  
+    28                                  ; FUNCTION 2: MOVE - Move data in memory
+    29                                  func_move:
+    30 0000005F BE[7F00]                    mov si, h2
+    31 00000062 E84601                      call pr
+    32 00000065 A10095                      mov ax, [0x9500]
+    33 00000068 A30096                      mov [0x9600], ax
+    34 0000006B BE[8D00]                    mov si, moved
+    35 0000006E E83A01                      call pr
+    36 00000071 8B160096                    mov dx, [0x9600]
+    37 00000075 E83F01                      call hex
+    38 00000078 BE[D101]                    mov si, ok
+    39 0000007B E82D01                      call pr
+    40 0000007E C3                          ret
+    41 0000007F 0A0D5B322E204D4F56-     h2: db 0xA,0xD,'[2. MOVE]',0xA,0xD,0
+    41 00000088 455D0A0D00         
+    42 0000008D 203078393530302D3E-     moved: db ' 0x9500->0x9600: 0x',0
+    42 00000096 3078393630303A2030-
+    42 0000009F 7800               
+    43                                  
+    44                                  ; FUNCTION 3: RENAME - Rename identifier
+    45                                  func_rename:
+    46 000000A1 BE[C700]                    mov si, h3
+    47 000000A4 E80401                      call pr
+    48 000000A7 C7060097ADDE                mov word [0x9700], 0xDEAD
+    49 000000AD BE[D700]                    mov si, old
+    50 000000B0 E8F800                      call pr
+    51 000000B3 BE[ED00]                    mov si, new
+    52 000000B6 E8F200                      call pr
+    53 000000B9 8B160097                    mov dx, [0x9700]
+    54 000000BD E8F700                      call hex
+    55 000000C0 BE[D101]                    mov si, ok
+    56 000000C3 E8E500                      call pr
+    57 000000C6 C3                          ret
+    58 000000C7 0A0D5B332E2052454E-     h3: db 0xA,0xD,'[3. RENAME]',0xA,0xD,0
+    58 000000D0 414D455D0A0D00     
+    59 000000D7 206F6C642E74787420-     old: db ' old.txt -> new.txt',0xA,0xD,0
+    59 000000E0 2D3E206E65772E7478-
+    59 000000E9 740A0D00           
+    60 000000ED 2049443A20307800        new: db ' ID: 0x',0
+    61                                  
+    62                                  ; FUNCTION 4: DELETE - Clear memory
+    63                                  func_delete:
+    64 000000F5 BE[1501]                    mov si, h4
+    65 000000F8 E8B000                      call pr
+    66 000000FB C70600950000                mov word [0x9500], 0x0000
+    67 00000101 BE[2501]                    mov si, deleted
+    68 00000104 E8A400                      call pr
+    69 00000107 8B160095                    mov dx, [0x9500]
+    70 0000010B E8A900                      call hex
+    71 0000010E BE[D101]                    mov si, ok
+    72 00000111 E89700                      call pr
+    73 00000114 C3                          ret
+    74 00000115 0A0D5B342E2044454C-     h4: db 0xA,0xD,'[4. DELETE]',0xA,0xD,0
+    74 0000011E 4554455D0A0D00     
+    75 00000125 2066696C65312E7478-     deleted: db ' file1.txt cleared: 0x',0
+    75 0000012E 7420636C6561726564-
+    75 00000137 3A20307800         
+    76                                  
+    77                                  ; Helper: Clear screen
+    78                                  cls:
+    79 0000013C B80300                      mov ax, 0x0003
+    80 0000013F CD10                        int 0x10
+    81 00000141 C3                          ret
+    82                                  
+    83                                  ; Helper: Banner
+    84                                  banner:
+    85 00000142 BE[4901]                    mov si, bn
+    86 00000145 E86300                      call pr
+    87 00000148 C3                          ret
+    88 00000149 3D3D3D3D3D3D3D3D3D-     bn: db '==========================',0xA,0xD
+    88 00000152 3D3D3D3D3D3D3D3D3D-
+    88 0000015B 3D3D3D3D3D3D3D3D0A-
+    88 00000164 0D                 
+    89 00000165 2020202044454E4E49-         db '    DENNIS OS v1.0',0xA,0xD
+    89 0000016E 53204F532076312E30-
+    89 00000177 0A0D               
+    90 00000179 202042793A2044656E-         db '  By: Dennis Sharon',0xA,0xD
+    90 00000182 6E697320536861726F-
+    90 0000018B 6E0A0D             
+    91 0000018E 3D3D3D3D3D3D3D3D3D-         db '==========================',0xA,0xD,0
+    91 00000197 3D3D3D3D3D3D3D3D3D-
+    91 000001A0 3D3D3D3D3D3D3D3D0A-
+    91 000001A9 0D00               
+    92                                  
+    93                                  ; Helper: Print string
+    94                                  pr:
+    95 000001AB B40E                        mov ah, 0x0e
+    96 000001AD AC                      .l: lodsb
+    97 000001AE 84C0                        test al, al
+    98 000001B0 7404                        jz .d
+    99 000001B2 CD10                        int 0x10
+   100 000001B4 EBF7                        jmp .l
+   101 000001B6 C3                      .d: ret
+   102                                  
+   103                                  ; Helper: Print hex
+   104                                  hex:
+   105 000001B7 B90400                      mov cx, 4
+   106 000001BA C1C204                  .l: rol dx, 4
+   107 000001BD 89D0                        mov ax, dx
+   108 000001BF 240F                        and al, 0x0F
+   109 000001C1 0430                        add al, 0x30
+   110 000001C3 3C39                        cmp al, 0x39
+   111 000001C5 7E02                        jle .p
+   112 000001C7 0407                        add al, 7
+   113 000001C9 B40E                    .p: mov ah, 0x0e
+   114 000001CB CD10                        int 0x10
+   115 000001CD 49                          dec cx
+   116 000001CE 75EA                        jnz .l
+   117 000001D0 C3                          ret
+   118                                  
+   119 000001D1 205B4F4B5D0A0D00        ok: db ' [OK]',0xA,0xD,0
+   120                                  
+   121 000001D9 00<rep 25h>             times 510-($-$$) db 0
+   122 000001FE 55AA                    dw 0xaa55
