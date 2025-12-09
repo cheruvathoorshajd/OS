@@ -2,7 +2,7 @@
 
 ***
 
-# Dennis OS - Assembly Operating System Project
+# OS - Assembly Operating System
 
 **Author:** Dennis Sharon Chervathoor Shaj
 **Language:** x86 Assembly (NASM Syntax)  
@@ -213,12 +213,3 @@ Each module will display a banner followed by the execution of all functions wit
 - [x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
 
 ***
-
-
-
-
-**Last Updated:** December 9, 2025
-
-[1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/32492178/55cb5dcf-bb13-4e1b-aced-0955fdcd42af/dennis_os_compute.asm)
-[2](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/32492178/9bc58d5c-4033-4ced-9597-3229527f1f16/dennis_os_memory.asm)
-[3](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/32492178/e9fa90ba-93a5-4ca5-b316-7fbfd97a905e/dennis_os.asm)
